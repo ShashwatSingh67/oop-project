@@ -8,7 +8,9 @@ struct StockData {
     std::string abbrev;
         // abbreviation (i.e. NVIDIA -> NVDA)
     std::string secType;
-        // stock, commodity, 
+        // stock, commodity, bond, etc.
+    int secID;
+    
 };
 
 #endif

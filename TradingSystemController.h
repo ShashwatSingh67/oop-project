@@ -1,12 +1,14 @@
-#ifndef TRADING_SYSTEM_CONTROLLER_H
-#define TRADING_SYSTEM_CONTROLLER_H
+#ifndef TRADINGSYSTEMCONTROLLER_H
+#define TRADINGSYSTEMCONTROLLER_H
 
 #include "Ticker.h"
 #include "Trader.h"
 #include "OrderBook.h"
+#include "StockData.h"
+#include "MarketData.h"
 
 #include <vector>
-#include <string.h>
+#include <string>
 
 using namespace std;
 
@@ -19,10 +21,9 @@ class TradingSystemController {
         vector<Trade> ticker;
         unordered_map<string, int> simulationConfig;
 
+        MarketData marketdata;
+
         OrderBook orderbook;
-
-
-
 
     public:
         // different instantiators depending on whether the program has

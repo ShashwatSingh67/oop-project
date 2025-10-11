@@ -1,5 +1,4 @@
-CC=gcc
-CFLAGS=-I
+CC=g++
 
-core: main.cpp OrderBookData/TradingSystemController.cpp
-	gcc -o TradeForge main.cpp OrderBookData/TradingSystemController.cpp -I
+core: main.cpp TradingSystemController.cpp MarketData.cpp
+	g++ -o TradeForge main.cpp TradingSystemController.cpp MarketData.cpp

@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include "TradingSystemController.h"
+
+#include <iostream>
 
 using namespace std;
 
@@ -8,5 +8,8 @@ using namespace std;
 
 int main() {
 
+    TradingSystemController Controller;
+
+    Controller.dumpPerformanceInfo();
     return 0;
 }

@@ -1,11 +1,13 @@
 #ifndef TRADER_H
 #define TRADER_H
 
+#include <unordered_map>
+
 class Trader {
     protected:
         int participantID;
         double cashBalance;
-        unordered_map<int, int> portfolio;
+        std::unordered_map<int, int> portfolio;
 
     public:
 
@@ -14,7 +16,7 @@ class Trader {
 
         bool placeOrder();
         double getPortfolioValue();
-        unordered_map<int, int> getPortfolio();
+        std::unordered_map<int, int> getPortfolio();
 };
 
 #endif

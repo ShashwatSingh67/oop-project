@@ -2,7 +2,7 @@
 #define ORDERBOOK_H
 
 class OrderBook {
-    private:
+    
 };
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef MARKETSTATE_H
 #define MARKETSTATE_H
 
-struct MarketState {
+struct {
 
-};
+} MarketState;
 
 #endif
