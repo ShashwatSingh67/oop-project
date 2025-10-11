@@ -1,6 +1,7 @@
 #ifndef TRADING_SYSTEM_CONTROLLER_H
 #define TRADING_SYSTEM_CONTROLLER_H
 
+#include "Ticker.h"
 #include "Trader.h"
 #include "OrderBook.h"
 
@@ -12,8 +13,12 @@ using namespace std;
 class TradingSystemController {
     private:
         bool isRunning;
-        bool botVarianceEnabled;
+
         vector<Trader> participants;
+        vector<int> botIDs;
+        vector<Trade> ticker;
+        unordered_map<string, int> simulationConfig;
+
         OrderBook orderbook;
 
 
@@ -36,7 +41,6 @@ class TradingSystemController {
 
         bool loadCustomData(string filepath);
         bool toggleRandomVariance();
-
 };
 
 #endif
