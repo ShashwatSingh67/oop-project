@@ -11,5 +11,12 @@ int main() {
     TradingSystemController Controller;
 
     Controller.dumpPerformanceInfo();
+
+    string label;
+    cout << "Retrieve ticker data for stock: ";
+    cin >> label;
+
+    Controller.marketdata.getHistoricalPrices(label);
+
     return 0;
 }

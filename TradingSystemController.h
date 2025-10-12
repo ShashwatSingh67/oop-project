@@ -21,11 +21,14 @@ class TradingSystemController {
         vector<Trade> ticker;
         unordered_map<string, int> simulationConfig;
 
-        MarketData marketdata;
-
+        
         OrderBook orderbook;
-
+        
     public:
+
+        MarketData marketdata; //MOVE BACK TO PRIVATE FOR FINAL
+
+
         // different instantiators depending on whether the program has
         // a default filepath saved to its most recent dataset used
         TradingSystemController();
