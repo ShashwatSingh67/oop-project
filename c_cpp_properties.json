@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "name": "Win32",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:/raylib/include"
+      ],
+      "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
+      "intelliSenseMode": "windows-gcc-x64"
+    }
+  ],
+  "version": 4
+}
