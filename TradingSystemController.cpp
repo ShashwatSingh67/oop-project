@@ -1,5 +1,7 @@
 #include "TradingSystemController.h"
 
+#include <iostream>
+
 using namespace std;
 
 TradingSystemController::TradingSystemController() {

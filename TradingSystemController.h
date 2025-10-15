@@ -45,6 +45,14 @@ class TradingSystemController {
 
         bool loadCustomData(string filepath);
         bool toggleRandomVariance();
+
+
+        /// REMOVE ALL FUNCTIONS BELOW THIS POINT
+        // funcs below here are used for debugging purposes and for
+        // constructing the final TSC. they should not be included
+        // in the final version of this assessment.
+
+        bool parseCommand(string command);
 };
 
 #endif

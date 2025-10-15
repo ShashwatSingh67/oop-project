@@ -14,7 +14,8 @@ class OrderBook {
         unordered_map<string, OrderList> sellOrders;
 
     public:
-        
+        bool submitBuyOrder(int traderID, string tickerLabel, int time, int price, int amount);
+        bool submitSellOrder(int traderID, string tickerLabel, int time, int price, int amount);
 };
 
 #endif
