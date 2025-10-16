@@ -17,6 +17,7 @@ connect(ui->tableWidget_Item_Data, &QTableWidget::cellDoubleClicked,
     ui->tableWidget_Item_Data->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 
     ui->tableWidget_Item_Data->setRowCount(50);
+
     for (int i = 0; i < 50; i++){
         ui->tableWidget_Item_Data->setItem(i,0,new QTableWidgetItem(QString("00000")));
         ui->tableWidget_Item_Data->setItem(i,1,new QTableWidgetItem(QString("stockname")));
@@ -88,6 +89,6 @@ void MainWindow::on_Home_Button_clicked()
 {
     homewindow *homeWin = new homewindow();
     homeWin->show();
-    this->hide(); // or this->close()
+    this->close(); // or this->close()
 }
 

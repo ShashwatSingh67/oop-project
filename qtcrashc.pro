@@ -14,6 +14,8 @@ SOURCES += \
     homewindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    market.cpp \
+    stockgraph.cpp \
     usertrades.cpp
 
 HEADERS += \
@@ -21,6 +23,8 @@ HEADERS += \
     botsoverview.h \
     homewindow.h \
     mainwindow.h \
+    market.h \
+    stockgraph.h \
     usertrades.h
 
 FORMS += \
@@ -28,6 +32,7 @@ FORMS += \
     botsoverview.ui \
     homewindow.ui \
     mainwindow.ui \
+    stockgraph.ui \
     usertrades.ui
 
 # Default rules for deployment.

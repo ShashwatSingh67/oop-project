@@ -10,6 +10,8 @@ usertrades::usertrades(QWidget *parent)
     , ui(new Ui::usertrades)
 {
     ui->setupUi(this);
+
+    ui->tableWidget_User_Data->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 }
 
 usertrades::~usertrades()

@@ -6,26 +6,82 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="Home_Button">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>388</width>
-     <height>29</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Home</string>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="Home_Button">
+     <property name="text">
+      <string>Home</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTableWidget" name="tableWidget_Bot_Data">
+     <property name="minimumSize">
+      <size>
+       <width>256</width>
+       <height>192</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>1920</width>
+       <height>1080</height>
+      </size>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+     </property>
+     <attribute name="verticalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Bot ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Strategy Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Variance Enabled</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Profit/Loss</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Buy Order</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Sell Order</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Trade Volume</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
