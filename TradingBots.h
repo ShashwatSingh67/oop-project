@@ -7,26 +7,28 @@
 #include "TradingParticipant.h"
 #include "MarketData.h"
 
+using namespace std;
+
 class TradingBots : public TradingParticipant{
 protected:
-    std::string strategy_type;
+    string strategy_type;
     double risk_tolerance;
     double variance;
 
 public:
     // Constructor
-    TradingBots(const std::string& participant_id, double initial_balance,
-                const std::string& strat_type, double risk_tol, double var);
+    TradingBots(const string& participant_id, double initial_balance,
+                const string& strat_type, double risk_tol, double var);
 
     // Destructor
     virtual ~TradingBots();
 
     // Abstract method - must be implemented by derived classes
-    virtual std::unordered_map<std::string, int> make_trading_decision(
+    virtual std::unordered_map<string, int> make_trading_decision(
         const MarketData& market_data) = 0;
 
     // getter 
-    std::string getTradingStrategy() const;
+    string getTradingStrategy() const;
     double getVariance() const;
 
     // setter

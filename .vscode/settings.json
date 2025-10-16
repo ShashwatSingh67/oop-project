@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "/home/shashwat-s/oop-project/third_party/glad/cmake"
+    "cmake.sourceDirectory": "/home/shashwat-s/oop-project/third_party/glad/cmake",
+    "files.associations": {
+        "string": "cpp"
+    }
 }
