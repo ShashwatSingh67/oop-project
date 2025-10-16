@@ -15,12 +15,12 @@ using namespace std;
 class TradingSystemController {
     private:
         bool isRunning;
+        int participantCount = 0;
+        int time = 0;
 
-        vector<Trader> participants;
-        vector<int> botIDs;
+        vector<Trader*> participants;
         vector<Trade> ticker;
         unordered_map<string, int> simulationConfig;
-
         
         OrderBook orderbook;
         
@@ -41,10 +41,18 @@ class TradingSystemController {
         int addBot(); // returns bot ID
         bool removeBot(int botID);
 
+        int addTrader();
+        int getTraderCount();
+
         bool dumpPerformanceInfo(); // dump all ticker data and performance metrics into external file
 
         bool loadCustomData(string filepath);
         bool toggleRandomVariance();
+
+        bool placeBuyOrder(int traderID, string tickerLabel, int amount, int price);
+        bool placeSellOrder(int traderID, string tickerLabel, int amount, int price);
+
+        void incrementTime();
 
 
         /// REMOVE ALL FUNCTIONS BELOW THIS POINT

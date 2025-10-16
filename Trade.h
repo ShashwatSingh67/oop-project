@@ -6,12 +6,28 @@ class Trade {
         int tradeID;
         int buyerBotID;
         int sellerBotID;
+
+        int timePlaced;
+        int timeFulfilled;
+
+        int price;
+        int amount;
+        int secID;
         
 
     public:
         double calculateFees();
         void updatePortfolios();
         double printTradingInfo(); // print out relevant info
+
+        int getTradeID();
+        int getBuyerID();
+        int getSellerID();
+
+        int getPrice();
+        int getAmount();
+        int getTradeValue();
+        int getSecID();
 
 };
 

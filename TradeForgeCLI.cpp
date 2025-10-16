@@ -39,6 +39,10 @@ bool TradeForgeCLI::parseCommand(string input) {
         return true;
     } else if (words[0] == "makebuyorder") {
         
+        //tsc.placeBuyOrder()
+    } else if (words[0] == "maketrader") {
+        tsc.addTrader();
+        cout << "Created trader with ID " << tsc.getTraderCount()-1 << endl;
     }
 
     return false;

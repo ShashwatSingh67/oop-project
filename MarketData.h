@@ -12,7 +12,6 @@ using namespace std;
 
 class MarketData {
     private:
-        int time = 0; // counts how many ticks the simulation has gone on for
         int historyDuration = 0; // counts how many ticks pastPrices lasts for
         int securityCount = 0;
         vector<string> securities; // 
