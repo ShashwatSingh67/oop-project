@@ -6,7 +6,7 @@
 #include <queue>
 
 struct OrderList {
-    unordered_map<int, queue<Order>> orders;
+    unordered_map<int, vector<Order>> orders;
     string state;
 };
 

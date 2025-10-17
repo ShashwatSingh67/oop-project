@@ -23,6 +23,9 @@ class Order {
         bool validate_order();
         double calculate_total_value();
         bool is_marketable();
+        int getTraderID();
+        int getTimestamp();
+        void partiallyFulfill(int quantityFulfilled);
 
         int getAmount();
 

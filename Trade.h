@@ -12,10 +12,14 @@ class Trade {
 
         int price;
         int amount;
-        int secID;
+        string tickerLabel;
         
 
     public:
+
+        Trade(int tradeID, int buyerID, int sellerID, int timePlaced, int timeFulfilled,
+            int price, int amount, string tickerLabel);
+
         double calculateFees();
         void updatePortfolios();
         double printTradingInfo(); // print out relevant info

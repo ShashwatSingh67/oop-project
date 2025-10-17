@@ -14,6 +14,7 @@ using namespace std;
 class OrderBook {
     private:
         int orderCounter = 0;
+        int tradeCounter = 0;
         unordered_map<string, OrderList> buyOrders;
         unordered_map<string, OrderList> sellOrders;
 
