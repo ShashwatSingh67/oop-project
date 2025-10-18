@@ -29,6 +29,8 @@ class OrderBook {
 
         vector<Trade>* getCompleteTrades();
         void clearTradeNotes();
+        void listAllOrders();
+        void listCompleteTrades();
 };
 
 #endif

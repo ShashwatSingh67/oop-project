@@ -87,3 +87,7 @@ bool MarketData::getHistoricalPrices(string tickerLabel) {
     cout << endl;
     return true;
 }
+
+vector<string> MarketData::getSecList() {
+    return securities;
+}

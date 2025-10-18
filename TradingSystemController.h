@@ -42,6 +42,8 @@ class TradingSystemController {
         bool removeBot(int botID);
 
         int addTrader();
+        int addTrader(int bal);
+        int addTrader(int bal, unordered_map<string, int>& secs);
         int getTraderCount();
 
         bool dumpPerformanceInfo(); // dump all ticker data and performance metrics into external file
@@ -53,6 +55,9 @@ class TradingSystemController {
         bool placeSellOrder(int traderID, string tickerLabel, int amount, int price);
 
         void incrementTime();
+
+        void dumpTraderInfo(int trID);
+        void dumpOrders();
 
 
         /// REMOVE ALL FUNCTIONS BELOW THIS POINT

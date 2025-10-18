@@ -24,6 +24,20 @@ int TradingSystemController::addTrader() {
     return participantCount-1;
 }
 
+int TradingSystemController::addTrader(int balance) {
+    Trader newTrader(participantCount, balance, marketdata.getSecList());
+    participants.push_back(&newTrader);
+    participantCount++;
+    return participantCount-1;
+}
+
+int TradingSystemController::addTrader(int balance, unordered_map<string, int>& secs) {
+    Trader newTrader(participantCount, balance, &secs);
+    participants.push_back(&newTrader);
+    participantCount++;
+    return participantCount-1;
+}
+
 void TradingSystemController::incrementTime() {
     time++;
 }
@@ -44,6 +58,8 @@ bool TradingSystemController::placeBuyOrder(int traderID, string tickerLabel, in
     vector<Trade>* results = orderbook.getCompleteTrades();
     if(!(*results).empty()) {
         for(Trade tr : *results) {
+            cout << "Trade " << tr.getTradeID() << " fulfilled.\n";
+            // tr.dumpInfo();
             participants[tr.getBuyerID()]->fulfillOrder(&tr);
             participants[tr.getSellerID()]->fulfillOrder(&tr);
         }
@@ -59,4 +75,12 @@ bool TradingSystemController::placeSellOrder(int traderID, string tickerLabel, i
 
 int TradingSystemController::getTraderCount() {
     return participantCount;
+}
+
+void TradingSystemController::dumpTraderInfo(int trID) {
+    participants[trID]->dumpPortfolio((marketdata.getSecList()));
+}
+
+void TradingSystemController::dumpOrders() {
+    orderbook.listAllOrders();
 }

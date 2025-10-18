@@ -1,11 +1,15 @@
 #ifndef TRADE_H
 #define TRADE_H
 
+#include <string>
+
+using namespace std;
+
 class Trade {
     private:
         int tradeID;
-        int buyerBotID;
-        int sellerBotID;
+        int buyerID;
+        int sellerID;
 
         int timePlaced;
         int timeFulfilled;
@@ -31,7 +35,7 @@ class Trade {
         int getPrice();
         int getAmount();
         int getTradeValue();
-        int getSecID();
+        string getSecID();
 
 };
 

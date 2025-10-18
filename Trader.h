@@ -5,6 +5,9 @@
 #include "Order.h"
 
 #include <unordered_map>
+#include <vector>
+
+using namespace std;
 
 class Trader {
     protected:
@@ -20,15 +23,18 @@ class Trader {
     public:
 
         Trader();
-        Trader(int ID, double balance);
+        Trader(int ID, double bal);
+        Trader(int ID, double bal, vector<string> securities);
+        Trader(int ID, double bal, unordered_map<string, int>* securities);
 
+        void dumpPortfolio(vector<string> securities);
         bool placeOrder();
         double getCashBalance();
         double getAvailableBalance();
         void changeAvailBalance(int diff);
         double getPortfolioValue();
         void fulfillOrder(Trade* tr);
-        std::unordered_map<string, int> getPortfolio();
+        unordered_map<string, int> getPortfolio();
 };
 
 #endif

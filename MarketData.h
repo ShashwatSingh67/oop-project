@@ -14,12 +14,12 @@ class MarketData {
     private:
         int historyDuration = 0; // counts how many ticks pastPrices lasts for
         int securityCount = 0;
-        vector<string> securities; // 
         unordered_map<string, StockData> securityData;
-
+        
         vector<MarketState> pastPrices;
-
-    public:
+        
+        public:
+        vector<string> securities;
         MarketData();
         MarketData(string filepath);
 
@@ -27,6 +27,7 @@ class MarketData {
         bool getHistoricalPrices(string tickerLabel);
 
         void listSecurities();
+        vector<string> getSecList();
 
 };
 

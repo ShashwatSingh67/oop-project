@@ -24,6 +24,7 @@ class Order {
         double calculate_total_value();
         bool is_marketable();
         int getTraderID();
+        int getOrderID();
         int getTimestamp();
         void partiallyFulfill(int quantityFulfilled);
 

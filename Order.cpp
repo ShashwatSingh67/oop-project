@@ -26,3 +26,7 @@ int Order::getTraderID() {
 int Order::getTimestamp() {
 	return this->timestamp;
 }
+
+int Order::getOrderID() {
+	return this->orderID;
+}
