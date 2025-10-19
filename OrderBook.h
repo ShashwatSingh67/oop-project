@@ -6,10 +6,18 @@
 
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include <string>
 #include <queue>
 
 using namespace std;
+
+struct OrderLocation {
+    bool type; // TRUE: BUY, FALSE: SELL
+    string tickerLabel;
+    int price;
+    int index;
+};
 
 class OrderBook {
     private:
@@ -18,7 +26,7 @@ class OrderBook {
         unordered_map<string, OrderList> buyOrders;
         unordered_map<string, OrderList> sellOrders;
 
-        unordered_map<int, Order*> allOrders;
+        map<int, OrderLocation> allOrders;
 
         vector<Trade> completeTrades;
 
@@ -32,5 +40,8 @@ class OrderBook {
         void listAllOrders();
         void listCompleteTrades();
 };
+
+
+
 
 #endif

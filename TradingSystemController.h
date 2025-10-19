@@ -66,6 +66,8 @@ class TradingSystemController {
         // in the final version of this assessment.
 
         bool parseCommand(string command);
+
+        ~TradingSystemController();
 };
 
 #endif

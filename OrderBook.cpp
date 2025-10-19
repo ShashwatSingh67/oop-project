@@ -77,11 +77,18 @@ bool OrderBook::submitBuyOrder(int traderID, string tickerLabel, int time, int p
             }
         }
     } else {
+
+        cout << "no interactions found, registering new order. \n";
         buyOrders[tickerLabel].orders[price].push_back(neword);
-        allOrders[orderCounter] = &buyOrders[tickerLabel].orders[price].back();
+        OrderLocation loc;
+        loc.type = true;
+        loc.tickerLabel = tickerLabel;
+        loc.price = price;
+        loc.index = buyOrders[tickerLabel].orders[price].size()-1;
+        allOrders[orderCounter] = loc;
     }
 
-    cout << "Order made successfully! \n";
+    cout << "Buy order made successfully! \n";
 
     cout << "traderID : " << traderID << endl;
     cout << "tickerLabel : " << tickerLabel << endl;
@@ -153,9 +160,23 @@ bool OrderBook::submitSellOrder(int traderID, string tickerLabel, int time, int 
             }
         }
     } else {
+        cout << "no interactions found, registering new order. \n";
         sellOrders[tickerLabel].orders[price].push_back(neword);
-        allOrders[orderCounter] = &sellOrders[tickerLabel].orders[price].back();
+        OrderLocation loc;
+        loc.type = false;
+        loc.tickerLabel = tickerLabel;
+        loc.price = price;
+        loc.index = buyOrders[tickerLabel].orders[price].size()-1;
+        allOrders[orderCounter] = loc;
     }
+
+    cout << "Sell order made successfully! \n";
+
+    cout << "traderID : " << traderID << endl;
+    cout << "tickerLabel : " << tickerLabel << endl;
+    cout << "time : " << time << endl;
+    cout << "price : " << price << endl;
+    cout << "amount : " << amount << endl;
 
     return true;
 }
@@ -168,10 +189,19 @@ void OrderBook::clearTradeNotes(){
 }
 
 void OrderBook::listAllOrders() {
-    for(int i=0; i<orderCounter+1; i++) {
-        if(allOrders.find(i) != allOrders.end()) {
-            Order order = *allOrders[i];
-            cout << "Order from " << order.getTraderID() << " for " << order.getAmount() << " of something idk. \n";
+    for(auto ord : allOrders) {
+        if(ord.second.type) {
+            cout << "Buy order from " << 
+            buyOrders[ord.second.tickerLabel].orders[ord.second.price][ord.second.index].getTraderID() << 
+            " for " << buyOrders[ord.second.tickerLabel].orders[ord.second.price][ord.second.index].getAmount() <<
+            " of " << ord.second.tickerLabel << " at " << ord.second.price;
+            cout << endl;
+        } else {
+            cout << "Sell order from " << 
+            sellOrders[ord.second.tickerLabel].orders[ord.second.price][ord.second.index].getTraderID() << 
+            " for " << sellOrders[ord.second.tickerLabel].orders[ord.second.price][ord.second.index].getAmount() <<
+            " of " << ord.second.tickerLabel << " at " << ord.second.price;
+            cout << endl;
         }
     }
 }

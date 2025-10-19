@@ -28,8 +28,10 @@ Trader::Trader(int ID, double bal, vector<string> securities) {
         string tickerLabel = securities[id];
         if(portfolio.find(tickerLabel) == portfolio.end()) {
             portfolio[tickerLabel] += securityCount(rng)*100;
+            actual++;
         }
     }
+    availPortfolio = portfolio;
 }
 
 Trader::Trader(int ID, double bal, unordered_map<string, int>* securities) {
@@ -41,18 +43,12 @@ Trader::Trader(int ID, double bal, unordered_map<string, int>* securities) {
 }
 
 void Trader::dumpPortfolio(vector<string> securities) {
-    cout << "dumping trader deets: \n";
+    cout << "Cash Available  : " << cashBalance << endl;
     int secSize = securities.size();
-    string firstItem = securities[0];
-    cout << "first item: " << firstItem << endl;
-    for(int i=6; i<secSize; i++) {
-        cout << "security #" << i << " out of " << secSize << endl;
+    for(int i=0; i<secSize; i++) {
         string sec = securities[i];
-        cout << "sec : " << sec << " , \n";
         if(portfolio.count(sec) != 0) {
-            cout << portfolio[sec] << endl;
-        } else {
-            cout << " 0 \n";
+            cout << sec << " : " << portfolio[sec] << endl;
         }
     }
 }
@@ -67,6 +63,14 @@ double Trader::getAvailableBalance() {
 
 void Trader::changeAvailBalance(int diff) {
     availBalance += diff;
+}
+
+unordered_map<string, int> Trader::getAvailPortfolio() {
+    return availPortfolio;
+}
+
+void Trader::changeAvailPortfolio(string tickerLabel, int diff) {
+    availPortfolio[tickerLabel] += diff;
 }
 
 void Trader::fulfillOrder(Trade* tr) {

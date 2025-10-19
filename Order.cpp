@@ -30,3 +30,7 @@ int Order::getTimestamp() {
 int Order::getOrderID() {
 	return this->orderID;
 }
+
+bool Order::getOrderType() {
+	return this->orderType;
+}

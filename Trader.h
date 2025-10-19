@@ -17,10 +17,10 @@ class Trader {
         // and take their tradeValue, and subtract it from current cash
         // balance for a more thorough check but this is good enough
         double availBalance;
-        unordered_map<string, int> portfolio;
         unordered_map<string, int> availPortfolio;
-
+        
     public:
+        unordered_map<string, int> portfolio;
 
         Trader();
         Trader(int ID, double bal);
@@ -35,6 +35,8 @@ class Trader {
         double getPortfolioValue();
         void fulfillOrder(Trade* tr);
         unordered_map<string, int> getPortfolio();
+        unordered_map<string, int> getAvailPortfolio();
+        void changeAvailPortfolio(string tickerLabel, int diff);
 };
 
 #endif

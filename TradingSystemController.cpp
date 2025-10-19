@@ -18,22 +18,22 @@ bool TradingSystemController::dumpPerformanceInfo() {
 }
 
 int TradingSystemController::addTrader() {
-    Trader newTrader(participantCount, 5000);
-    participants.push_back(&newTrader);
+    Trader* newTrader = new Trader(participantCount, 5000, marketdata.getSecList());
+    participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;
 }
 
 int TradingSystemController::addTrader(int balance) {
-    Trader newTrader(participantCount, balance, marketdata.getSecList());
-    participants.push_back(&newTrader);
+    Trader* newTrader = new Trader(participantCount, balance, marketdata.getSecList());
+    participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;
 }
 
 int TradingSystemController::addTrader(int balance, unordered_map<string, int>& secs) {
-    Trader newTrader(participantCount, balance, &secs);
-    participants.push_back(&newTrader);
+    Trader* newTrader = new Trader(participantCount, balance, &secs);
+    participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;
 }
@@ -47,16 +47,19 @@ bool TradingSystemController::placeBuyOrder(int traderID, string tickerLabel, in
     // place the given order into the order book
 
     double tradeCost = price * amount;
+    double traderBal = participants[traderID]->getAvailableBalance();
 
-    if(participants[traderID]->getAvailableBalance() < tradeCost) {
+    if(traderBal >= tradeCost) {
         orderbook.submitBuyOrder(traderID, tickerLabel, time, price, amount);
         participants[traderID]->changeAvailBalance(-tradeCost);
     } else {
+        cout << "trader available balance: " << traderBal << endl;
+        cout << "trade cost:               " << tradeCost << endl;
         return false;
     }
 
     vector<Trade>* results = orderbook.getCompleteTrades();
-    if(!(*results).empty()) {
+    if(!results->empty()) {
         for(Trade tr : *results) {
             cout << "Trade " << tr.getTradeID() << " fulfilled.\n";
             // tr.dumpInfo();
@@ -69,6 +72,27 @@ bool TradingSystemController::placeBuyOrder(int traderID, string tickerLabel, in
     return true;
 }
 bool TradingSystemController::placeSellOrder(int traderID, string tickerLabel, int amount, int price) {
+    double traderSecurityBal = participants[traderID]->getAvailPortfolio()[tickerLabel];
+
+    if(traderSecurityBal >= amount) {
+        orderbook.submitSellOrder(traderID, tickerLabel, time, price, amount);
+        participants[traderID]->changeAvailPortfolio(tickerLabel, -amount);
+    } else {
+        cout << "trader security balance: " << traderSecurityBal << endl;
+        cout << "amount:                  " << amount << endl;
+        return false;
+    }
+
+    vector<Trade>* results = orderbook.getCompleteTrades();
+    if(!results->empty()) {
+        for(Trade tr : *results) {
+            cout << "Trade " << tr.getTradeID() << " fulfilled.\n";
+            // tr.dumpInfo();
+            participants[tr.getBuyerID()]->fulfillOrder(&tr);
+            participants[tr.getSellerID()]->fulfillOrder(&tr);
+        }
+        orderbook.clearTradeNotes();
+    }
     // FILL THIS IN
     return true;
 }
@@ -83,4 +107,11 @@ void TradingSystemController::dumpTraderInfo(int trID) {
 
 void TradingSystemController::dumpOrders() {
     orderbook.listAllOrders();
+}
+
+TradingSystemController::~TradingSystemController() {
+    for (Trader* trader : participants) {
+        delete trader;
+    }
+    participants.clear();
 }
