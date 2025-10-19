@@ -36,6 +36,7 @@ public:
         gridLayout_2->setObjectName("gridLayout_2");
         Home_Button = new QPushButton(aboutpage);
         Home_Button->setObjectName("Home_Button");
+        Home_Button->setMinimumSize(QSize(0, 31));
 
         gridLayout_2->addWidget(Home_Button, 0, 0, 1, 1);
 
@@ -45,7 +46,7 @@ public:
         frame->setFrameShadow(QFrame::Shadow::Raised);
         label = new QLabel(frame);
         label->setObjectName("label");
-        label->setGeometry(QRect(90, 50, 1091, 361));
+        label->setGeometry(QRect(110, 90, 1081, 401));
         QFont font;
         font.setPointSize(16);
         label->setFont(font);

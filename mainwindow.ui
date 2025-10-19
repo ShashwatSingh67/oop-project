@@ -137,6 +137,12 @@
     </item>
     <item row="0" column="0" colspan="2">
      <widget class="QPushButton" name="Home_Button">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>31</height>
+       </size>
+      </property>
       <property name="text">
        <string>Home</string>
       </property>
@@ -157,7 +163,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action">
    <property name="text">
-    <string> </string>
+    <string/>
    </property>
   </action>
  </widget>

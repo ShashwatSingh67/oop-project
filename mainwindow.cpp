@@ -4,6 +4,7 @@
 #include "usertrades.h"
 #include "aboutpage.h"
 #include "ui_mainwindow.h"
+#include "stockgraph.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -11,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-connect(ui->tableWidget_Item_Data, &QTableWidget::cellDoubleClicked,
-    this, &MainWindow::on_tableWidget_Item_Data_cellDoubleClicked);
+connect(ui->tableWidget_Item_Data, &QTableWidget::cellClicked,
+    this, &MainWindow::on_tableWidget_Item_Data_cellClicked);
 
     ui->tableWidget_Item_Data->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 
@@ -62,22 +63,6 @@ void MainWindow::on_pushButton_clicked()
     setCentralWidget(chartview);
 }
 
-/*
-void MainWindow::on_tableWidget_Item_Data_cellDoubleClicked(int row, int column)
-{
-    qDebug() << ui->tableWidget_Item_Data->itemAt(row,column)->on_pushButton_clicked();
-}
-*/
-
-void MainWindow::on_tableWidget_Item_Data_cellDoubleClicked(int row, int column)
-{
-    Q_UNUSED(row);
-    Q_UNUSED(column);
-
-    // Simply call your existing function
-    on_pushButton_clicked();
-}
-
 void MainWindow::on_MarketData_Button_clicked()
 {
     // Toggle visibility
@@ -90,5 +75,17 @@ void MainWindow::on_Home_Button_clicked()
     homewindow *homeWin = new homewindow();
     homeWin->show();
     this->close(); // or this->close()
+}
+
+
+void MainWindow::on_tableWidget_Item_Data_cellClicked(int row, int column)
+{
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+
+    stockgraph *stockGrp = new stockgraph();
+    stockGrp->show();
+    this->close(); // or this->close()
+    //on_pushButton_clicked();
 }
 

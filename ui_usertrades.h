@@ -35,6 +35,7 @@ public:
         gridLayout->setObjectName("gridLayout");
         Home_Button = new QPushButton(usertrades);
         Home_Button->setObjectName("Home_Button");
+        Home_Button->setMinimumSize(QSize(0, 31));
 
         gridLayout->addWidget(Home_Button, 0, 0, 1, 1);
 
