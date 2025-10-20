@@ -19,6 +19,7 @@ class Trader {
         double availBalance;
         unordered_map<string, int> availPortfolio;
         unordered_map<string, int> portfolio;
+        vector<int> lastIdealPortfolio = {};
         
     public:
 
@@ -28,6 +29,8 @@ class Trader {
         Trader(int ID, double bal, unordered_map<string, int>* securities);
 
         void dumpPortfolio(vector<string> securities);
+        vector<int> getLastIdealPortfolio();
+        void setLastIdealPortfolio(vector<int> p);
         vector<int> getPortfolioVector(vector<string> securities);
         double getCashBalance();
         double getAvailableBalance();

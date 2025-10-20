@@ -76,10 +76,10 @@ bool TradeForgeCLI::parseCommand(string input) {
         if(words.size()==2) {
             id = tsc.addTrader(stoi(words[1]));
         } else if (words.size() > 2) {
-            for(int i=2; i<words.size()-1; i+=2) {
-                secs[words[i]] = stoi(words[i+1]);
-            }
-            id = tsc.addTrader(stoi(words[1]), secs);
+            // for(int i=2; i<words.size()-1; i+=2) {
+            //     secs[words[i]] = stoi(words[i+1]);
+            // }
+            // id = tsc.addTrader(stoi(words[1]), secs);
         } else {
             id = tsc.addTrader();
         }
@@ -97,6 +97,9 @@ bool TradeForgeCLI::parseCommand(string input) {
         return true;
     } else if (words[0] == "endsim") {
         // FILL IN
+        return true;
+    } else if (words[0] == "takestep") {
+        tsc.completeNextStep();
         return true;
     }
 

@@ -12,8 +12,8 @@ class EmptyBot : public TradingBot {
     EmptyBot(int pc, int bal, vector<string> secList)
             : TradingBot(pc, bal, secList) {}
     
-    vector<int> makeTradingDecision(vector<MarketState>* marketState, vector<int> portfolio) override {
-        return portfolio;
+    pair<vector<int>, vector<int>> makeTradingDecision(vector<MarketState>* marketState, vector<int> portfolio) override {
+        return pair<vector<int>, vector<int>>(portfolio, vector<int>(portfolio.size(), 0));
     }
 };
 

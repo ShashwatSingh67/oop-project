@@ -6,6 +6,7 @@
 #include "OrderData/OrderBook.h"
 #include "StockData.h"
 #include "MarketData.h"
+#include "TradingBots.h"
 
 #include <vector>
 #include <string>
@@ -44,7 +45,7 @@ class TradingSystemController {
 
         int addTrader();
         int addTrader(int bal);
-        int addTrader(int bal, unordered_map<string, int>& secs);
+        // int addTrader(int bal, unordered_map<string, int>& secs);
         int getTraderCount();
 
         bool dumpPerformanceInfo(); // dump all ticker data and performance metrics into external file

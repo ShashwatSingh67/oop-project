@@ -42,6 +42,14 @@ Trader::Trader(int ID, double bal, unordered_map<string, int>* securities) {
     availPortfolio = *securities;
 }
 
+vector<int> Trader::getLastIdealPortfolio() {
+    return lastIdealPortfolio;
+}
+
+void Trader::setLastIdealPortfolio(vector<int> p) {
+    lastIdealPortfolio = p;
+}
+
 vector<int> Trader::getPortfolioVector(vector<string> securities) {
     int ss = securities.size();
     vector<int> result(ss, 0);

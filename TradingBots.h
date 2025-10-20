@@ -5,6 +5,7 @@
 #include "Trader.h"
 
 #include <string>
+#include <utility>
 
 class TradingBot : public Trader {
     private:
@@ -17,7 +18,7 @@ class TradingBot : public Trader {
         TradingBot(int pc, int bal, vector<string> secList)
             : Trader(pc, bal, secList) {}; // upon instantiating TradingBot, carry all args to Trader.
 
-        virtual vector<int> makeTradingDecision(vector<MarketState>* data, vector<int> portfolio) = 0; 
+        virtual pair<vector<int>, vector<int>> makeTradingDecision(vector<MarketState>* data, vector<int> portfolio) = 0; 
         // take in marketdata and decide what position to hold
 };
 

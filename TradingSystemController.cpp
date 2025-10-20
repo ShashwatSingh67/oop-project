@@ -9,31 +9,57 @@
 using namespace std;
 
 TradingSystemController::TradingSystemController() {
-    
+    for(int i=0; i<10; i++) { // ADD 10 RWBs
+        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 5000, marketdata.getSecList());
+        participants.push_back(rwb);
+    }
 }
 
 TradingSystemController::TradingSystemController(string filepath) {
 
     for(int i=0; i<10; i++) { // ADD 10 RWBs
-        RandomWalkBot* rwb = new RandomWalkBot(participantCount, 5000, marketdata.getSecList());
+        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 5000, marketdata.getSecList());
         participants.push_back(rwb);
     }
     // ADD BOTS HERE
 }
 
 int TradingSystemController::startSimulation() {
+    return 0;
     //
 }
 
 
 int TradingSystemController::stopSimulation() {
+    return 0;
     //
 }
 
 bool TradingSystemController::completeNextStep() {
-    for(auto bot : participants) {
-        vector<int> currentPos = bot->getPortfolioVector(marketdata.getSecList());
-        vector<int> desiredPos = bot->makeTradingDecision(marketdata.getAllPastPrices(), bot->getPortfolioVector(marketdata.getSecList()));
+    for(int i=0; i<participantCount; i++) {
+        TradingBot* bot = participants[i];
+        vector<int> currentPos = bot->getLastIdealPortfolio();
+        if(currentPos.empty()) {
+            currentPos = bot->getPortfolioVector(marketdata.getSecList());
+        }
+        pair<vector<int>, vector<int>> desiredPos = bot->makeTradingDecision(marketdata.getAllPastPrices(), currentPos);
+        cout << "called makeTD on bot " << i << endl;
+        
+        bot->setLastIdealPortfolio(desiredPos.first);
+        cout << "desiredPost.first.size() : " << desiredPos.first.size() << endl;
+        // if(currentPos.empty()) {
+        //     currentPos = vector<int>(desiredPos.first.size(), 0);
+        // }
+        int vs = currentPos.size();
+        for(int j=0; j<vs; j++) {
+            if(desiredPos.first[j] > currentPos[j]) {
+                this->placeBuyOrder(i, marketdata.getSecList()[j], abs(currentPos[j]-desiredPos.first[j]), desiredPos.second[j]);
+                cout << "placed buy order\n";
+            } else if(desiredPos.first[j] < currentPos[j]) {
+                this->placeSellOrder(i, marketdata.getSecList()[j], abs(desiredPos.first[j]-currentPos[j]), desiredPos.second[j]);
+                cout << "placed sell order\n";
+            }
+        }
     }
     return true;
 }
