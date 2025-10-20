@@ -92,6 +92,12 @@ bool TradeForgeCLI::parseCommand(string input) {
     } else if (words[0] == "listorders") {
         tsc.dumpOrders();
         return true;
+    } else if (words[0] == "startsim") {
+        // FILL IN
+        return true;
+    } else if (words[0] == "endsim") {
+        // FILL IN
+        return true;
     }
 
     return false;

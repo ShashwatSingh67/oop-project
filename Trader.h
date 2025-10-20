@@ -2,7 +2,7 @@
 #define TRADER_H
 
 #include "Trade.h"
-#include "Order.h"
+#include "OrderData/Order.h"
 
 #include <unordered_map>
 #include <vector>

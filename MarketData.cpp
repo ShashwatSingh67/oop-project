@@ -91,3 +91,7 @@ bool MarketData::getHistoricalPrices(string tickerLabel) {
 vector<string> MarketData::getSecList() {
     return securities;
 }
+
+vector<MarketState>* MarketData::getAllPastPrices() {
+    return &pastPrices;
+}

@@ -16,8 +16,7 @@ class TradingBot : public Trader {
         TradingBot();
         TradingBot(std::string strat, bool varianceEnabled);
 
-        double makeTradingDecision(); // take in marketData
-        double applyRiskManagement(); // MIGHT REMOVE
+        vector<int> makeTradingDecision(); // take in marketdata and decide what to do
 };
 
 #endif

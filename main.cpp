@@ -17,7 +17,6 @@ int main() {
 
     cin.ignore();
 
-
     string input;
     while(true) {
         cout << "> ";

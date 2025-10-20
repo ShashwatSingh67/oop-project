@@ -1,5 +1,7 @@
 #include "TradingSystemController.h"
 
+// ADD bot model .h files here
+
 #include <iostream>
 
 using namespace std;
@@ -9,8 +11,20 @@ TradingSystemController::TradingSystemController() {
 }
 
 TradingSystemController::TradingSystemController(string filepath) {
-
+    // ADD BOTS HERE
 }
+
+int TradingSystemController::startSimulation() {
+    //
+}
+
+
+int TradingSystemController::stopSimulation() {
+    //
+}
+
+
+
 
 bool TradingSystemController::dumpPerformanceInfo() {
     this->marketdata.listSecurities();
