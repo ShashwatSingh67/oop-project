@@ -18,7 +18,7 @@ class TradingSystemController {
         int participantCount = 0;
         int time = 0;
 
-        vector<Trader*> participants;
+        vector<TradingBot*> participants;
         vector<Trade> ticker;
         unordered_map<string, int> simulationConfig;
         
@@ -37,6 +37,7 @@ class TradingSystemController {
         // ints are used as return values to return error codes
         int startSimulation();
         int stopSimulation();
+        bool completeNextStep();
 
         int addBot(); // returns bot ID
         bool removeBot(int botID);

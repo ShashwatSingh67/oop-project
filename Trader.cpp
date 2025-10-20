@@ -42,6 +42,17 @@ Trader::Trader(int ID, double bal, unordered_map<string, int>* securities) {
     availPortfolio = *securities;
 }
 
+vector<int> Trader::getPortfolioVector(vector<string> securities) {
+    int ss = securities.size();
+    vector<int> result(ss, 0);
+    for(int i=0; i<ss; i++) {
+        if(portfolio.find(securities[i]) != portfolio.end()) {
+            result[i] = portfolio[securities[i]];
+        }
+    }
+    return result;
+}
+
 void Trader::dumpPortfolio(vector<string> securities) {
     cout << "Cash Available  : " << cashBalance << endl;
     int secSize = securities.size();

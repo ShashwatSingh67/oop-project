@@ -17,9 +17,9 @@ class MarketData {
         unordered_map<string, StockData> securityData;
         
         vector<MarketState> pastPrices;
+        vector<string> securities;
         
         public:
-        vector<string> securities;
         MarketData();
         MarketData(string filepath);
 

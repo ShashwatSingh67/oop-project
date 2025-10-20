@@ -1,9 +1,10 @@
 #ifndef TRADING_BOTS_H
 #define TRADING_BOTS_H
 
-#include <string>
-
+#include "MarketData.h"
 #include "Trader.h"
+
+#include <string>
 
 class TradingBot : public Trader {
     private:
@@ -13,10 +14,11 @@ class TradingBot : public Trader {
 
     public:
 
-        TradingBot();
-        TradingBot(std::string strat, bool varianceEnabled);
+        TradingBot(int pc, int bal, vector<string> secList)
+            : Trader(pc, bal, secList) {}; // upon instantiating TradingBot, carry all args to Trader.
 
-        vector<int> makeTradingDecision(); // take in marketdata and decide what to do
+        virtual vector<int> makeTradingDecision(vector<MarketState>* data, vector<int> portfolio) = 0; 
+        // take in marketdata and decide what position to hold
 };
 
 #endif

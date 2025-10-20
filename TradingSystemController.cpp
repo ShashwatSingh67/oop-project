@@ -1,5 +1,7 @@
 #include "TradingSystemController.h"
 
+#include "Bots/EmptyBot.h"
+#include "Bots/RandomWalkBot.h"
 // ADD bot model .h files here
 
 #include <iostream>
@@ -11,6 +13,11 @@ TradingSystemController::TradingSystemController() {
 }
 
 TradingSystemController::TradingSystemController(string filepath) {
+
+    for(int i=0; i<10; i++) { // ADD 10 RWBs
+        RandomWalkBot* rwb = new RandomWalkBot(participantCount, 5000, marketdata.getSecList());
+        participants.push_back(rwb);
+    }
     // ADD BOTS HERE
 }
 
@@ -23,7 +30,13 @@ int TradingSystemController::stopSimulation() {
     //
 }
 
-
+bool TradingSystemController::completeNextStep() {
+    for(auto bot : participants) {
+        vector<int> currentPos = bot->getPortfolioVector(marketdata.getSecList());
+        vector<int> desiredPos = bot->makeTradingDecision(marketdata.getAllPastPrices(), bot->getPortfolioVector(marketdata.getSecList()));
+    }
+    return true;
+}
 
 
 bool TradingSystemController::dumpPerformanceInfo() {
@@ -32,21 +45,14 @@ bool TradingSystemController::dumpPerformanceInfo() {
 }
 
 int TradingSystemController::addTrader() {
-    Trader* newTrader = new Trader(participantCount, 5000, marketdata.getSecList());
+    EmptyBot* newTrader = new EmptyBot(participantCount, 5000, marketdata.getSecList());
     participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;
 }
 
 int TradingSystemController::addTrader(int balance) {
-    Trader* newTrader = new Trader(participantCount, balance, marketdata.getSecList());
-    participants.push_back(newTrader);
-    participantCount++;
-    return participantCount-1;
-}
-
-int TradingSystemController::addTrader(int balance, unordered_map<string, int>& secs) {
-    Trader* newTrader = new Trader(participantCount, balance, &secs);
+    EmptyBot* newTrader = new EmptyBot(participantCount, balance, marketdata.getSecList());
     participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;

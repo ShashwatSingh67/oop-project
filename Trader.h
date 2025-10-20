@@ -18,9 +18,9 @@ class Trader {
         // balance for a more thorough check but this is good enough
         double availBalance;
         unordered_map<string, int> availPortfolio;
+        unordered_map<string, int> portfolio;
         
     public:
-        unordered_map<string, int> portfolio;
 
         Trader();
         Trader(int ID, double bal);
@@ -28,11 +28,10 @@ class Trader {
         Trader(int ID, double bal, unordered_map<string, int>* securities);
 
         void dumpPortfolio(vector<string> securities);
-        bool placeOrder();
+        vector<int> getPortfolioVector(vector<string> securities);
         double getCashBalance();
         double getAvailableBalance();
         void changeAvailBalance(int diff);
-        double getPortfolioValue();
         void fulfillOrder(Trade* tr);
         unordered_map<string, int> getPortfolio();
         unordered_map<string, int> getAvailPortfolio();
