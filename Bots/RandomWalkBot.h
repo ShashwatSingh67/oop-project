@@ -17,17 +17,19 @@ class RandomWalkBot : public TradingBot {
     pair<vector<int>, vector<int>> makeTradingDecision(vector<MarketState>* data, vector<int> port) override {
         random_device dev;
         mt19937 rng(dev());
+        uniform_int_distribution<mt19937::result_type> small(1,5);
         uniform_int_distribution<mt19937::result_type> dist(1,10);
+        uniform_int_distribution<mt19937::result_type> guess(1,1000);
         // for each stock, take the average of the last 50, add 10% random variance, make that order.
         int result = dist(rng);
         int sc = port.size();
         vector<int> prices(sc, 0);
-        if(result > 5) {
+        if(result > 2) {
 
             for(int i=0; i<sc; i++) {
-                port[i] += dist(rng);
-                port[i] -= dist(rng);
-                prices[i] = ((*data)[data->size()-1]).prices[i] += dist(rng)/2;
+                port[i] += guess(rng);
+                port[i] -= guess(rng);
+                prices[i] = ((*data)[data->size()-1]).prices[i] + small(rng);
             }
         }
         pair<vector<int>, vector<int>> ret;

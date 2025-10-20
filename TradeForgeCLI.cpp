@@ -90,7 +90,11 @@ bool TradeForgeCLI::parseCommand(string input) {
         tsc.dumpTraderInfo(stoi(words[1]));
         return true;
     } else if (words[0] == "listorders") {
-        tsc.dumpOrders();
+        if(words.size() == 2) {
+            tsc.dumpOrders(words[1]);
+        } else {
+            tsc.dumpOrders();
+        }
         return true;
     } else if (words[0] == "startsim") {
         // FILL IN
@@ -99,6 +103,12 @@ bool TradeForgeCLI::parseCommand(string input) {
         // FILL IN
         return true;
     } else if (words[0] == "takestep") {
+        if(words.size() == 2) {
+            for(int i=0; i<stoi(words[1]); i++) {
+                tsc.completeNextStep();
+            }
+            return true;
+        }
         tsc.completeNextStep();
         return true;
     }

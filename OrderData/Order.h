@@ -26,6 +26,7 @@ class Order {
         int getTraderID();
         int getOrderID();
         int getTimestamp();
+        int getPrice();
         bool getOrderType();
         void partiallyFulfill(int quantityFulfilled);
 

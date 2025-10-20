@@ -30,6 +30,7 @@ class Trader {
 
         void dumpPortfolio(vector<string> securities);
         vector<int> getLastIdealPortfolio();
+        int getPortfolioValue(string label);
         void setLastIdealPortfolio(vector<int> p);
         vector<int> getPortfolioVector(vector<string> securities);
         double getCashBalance();

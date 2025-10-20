@@ -4,188 +4,148 @@
 
 using namespace std;
 
-bool OrderBook::submitBuyOrder(int traderID, string tickerLabel, int time, int price, int amount){ 
-    orderCounter++;
-    // FILL THIS IN
+bool OrderBook::submitBuyOrder(int traderID, string tickerLabel, int time, int price, int amount) { 
+    // Remove all past buy and sell orders for this trader and stock
+    cancelTraderOrders(traderID, tickerLabel);
 
+    orderCounter++;
     Order neword(orderCounter, traderID, tickerLabel, true, amount, price, time);
 
-    // check if there are sell orders for the same stock at the same price
     int amountFulfillable = amount;
 
-    if(!sellOrders[tickerLabel].orders[price].empty()) { 
-
-        // grab pointer to the queue containing sell orders for the same stock
-        // at the same price so you don't have to use that longass reference
-        // every single time
+    if (!sellOrders[tickerLabel].orders[price].empty()) {
         vector<Order>* competingSellOrders = &sellOrders[tickerLabel].orders[price];
 
-        int amountFulfilled = 0;
-
-        while(!sellOrders[tickerLabel].orders[price].empty()
-        && amountFulfillable > 0) {
+        while (!competingSellOrders->empty() && amountFulfillable > 0) {
             Order* topSellOrder = &competingSellOrders->front();
 
-            if(topSellOrder->getAmount() > amountFulfillable) {
-                topSellOrder->partiallyFulfill(amount);
-                amountFulfillable = 0;
+            if (topSellOrder->getAmount() > amountFulfillable) {
+                // Partially fulfill the sell order
+                topSellOrder->partiallyFulfill(amountFulfillable);
 
-                Trade fulfillment = Trade(tradeCounter++, traderID, topSellOrder->getTraderID(),
-                    topSellOrder->getTimestamp(), time, price, amount, tickerLabel);
-
+                // Create a trade for the fulfilled amount
+                Trade fulfillment(tradeCounter++, traderID, topSellOrder->getTraderID(),
+                                  topSellOrder->getTimestamp(), time, price, amountFulfillable, tickerLabel);
                 completeTrades.push_back(fulfillment);
 
-                // remove both buy and sell orders, mark the buy order as
-                // completely fulfilled, make a new replica sell order
-                // holding the difference as the desired amount. send
-                // both portions of the fulfilled buy and sell orders to
-                // completed notebook.
-                // set amountFulfillable to 0
-            } else if (topSellOrder->getAmount() < amountFulfillable) {
+                amountFulfillable = 0; // Fully fulfilled the buy order
+            } else {
+                // Fully fulfill the sell order and partially fulfill the buy order
                 amountFulfillable -= topSellOrder->getAmount();
-                amountFulfilled += topSellOrder->getAmount();
-                
+
+                Trade fulfillment(tradeCounter++, traderID, topSellOrder->getTraderID(),
+                                  topSellOrder->getTimestamp(), time, price, topSellOrder->getAmount(), tickerLabel);
+                completeTrades.push_back(fulfillment);
+
+                // Remove the fully fulfilled sell order
                 allOrders.erase(topSellOrder->getOrderID());
                 competingSellOrders->erase(competingSellOrders->begin());
-
-                Trade fulfillment = Trade(tradeCounter++, traderID, topSellOrder->getTraderID(),
-                    topSellOrder->getTimestamp(), time, price, amountFulfilled, tickerLabel);
-                    
-                completeTrades.push_back(fulfillment);
-                    
-                // remove both buy and sell orders, mark the sell order
-                // as complete and place a replica smaller buy order into
-                // the respective book. send the portions to completed notebook.
-                // change amountFulfillable accordingly and let it repeat
-                // to see if there's more sell orders that can fulfill the buy.
-            } else if (topSellOrder->getAmount() == amountFulfillable) {
-
-                amountFulfilled = amountFulfillable;
-                amountFulfillable = 0;
-                
-                Trade fulfillment = Trade(tradeCounter++, traderID, topSellOrder->getTraderID(),
-                topSellOrder->getTimestamp(), time, price, topSellOrder->getAmount(), tickerLabel);
-
-                allOrders.erase(topSellOrder->getOrderID());
-
-                competingSellOrders->erase(competingSellOrders->begin());
-                
-                completeTrades.push_back(fulfillment);
-                
-                // remove both and mark them as complete. place nothing new into
-                // the orderBook.
             }
         }
-    } else {
+    }
 
-        cout << "no interactions found, registering new order. \n";
+    // If there is any remaining amount, add the buy order to the order book
+    if (amountFulfillable > 0) {
+        neword.partiallyFulfill(amount - amountFulfillable); // Adjust the order quantity
         buyOrders[tickerLabel].orders[price].push_back(neword);
-        OrderLocation loc;
-        loc.type = true;
-        loc.tickerLabel = tickerLabel;
-        loc.price = price;
-        loc.index = buyOrders[tickerLabel].orders[price].size()-1;
+        OrderLocation loc = {true, tickerLabel, price, (int)buyOrders[tickerLabel].orders[price].size() - 1};
         allOrders[orderCounter] = loc;
     }
 
-    cout << "Buy order made successfully! \n";
-
-    cout << "traderID : " << traderID << endl;
-    cout << "tickerLabel : " << tickerLabel << endl;
-    cout << "time : " << time << endl;
-    cout << "price : " << price << endl;
-    cout << "amount : " << amount << endl;
-
     return true;
 }
-bool OrderBook::submitSellOrder(int traderID, string tickerLabel, int time, int price, int amount){ 
-    orderCounter++;
-    // FILL THIS IN 
 
+bool OrderBook::submitSellOrder(int traderID, string tickerLabel, int time, int price, int amount) { 
+    // Remove all past buy and sell orders for this trader and stock
+    cancelTraderOrders(traderID, tickerLabel);
+
+    orderCounter++;
     Order neword(orderCounter, traderID, tickerLabel, false, amount, price, time);
 
     int amountFulfillable = amount;
 
-    if(!buyOrders[tickerLabel].orders[price].empty()) {
-
+    if (!buyOrders[tickerLabel].orders[price].empty()) {
         vector<Order>* competingBuyOrders = &buyOrders[tickerLabel].orders[price];
 
-        int amountFulfilled = 0;
-
-        while(!buyOrders[tickerLabel].orders[price].empty()
-        && amountFulfillable > 0) {
+        while (!competingBuyOrders->empty() && amountFulfillable > 0) {
             Order* topBuyOrder = &competingBuyOrders->front();
 
-            if((*topBuyOrder).getAmount() > amountFulfillable) {
-                // reduce remaining value of original buy order, completely fulfill current sell.
-                (*topBuyOrder).partiallyFulfill(amount);
+            if (topBuyOrder->getAmount() > amountFulfillable) {
+                // Partially fulfill the buy order
+                topBuyOrder->partiallyFulfill(amountFulfillable);
 
-                amountFulfillable = 0;
-
-                Trade fulfillment = Trade(tradeCounter++, topBuyOrder->getTraderID(), traderID,
-                    topBuyOrder->getTimestamp(), time, price, amount, tickerLabel);
-
+                // Create a trade for the fulfilled amount
+                Trade fulfillment(tradeCounter++, topBuyOrder->getTraderID(), traderID,
+                                  topBuyOrder->getTimestamp(), time, price, amountFulfillable, tickerLabel);
                 completeTrades.push_back(fulfillment);
-                
-            } else if (topBuyOrder->getAmount() < amountFulfillable) {
-                // adjust amountFulfillable, remove top buy order and repeat
 
+                amountFulfillable = 0; // Fully fulfilled the sell order
+            } else {
+                // Fully fulfill the buy order and partially fulfill the sell order
                 amountFulfillable -= topBuyOrder->getAmount();
-                amountFulfilled   += topBuyOrder->getAmount(); 
 
-                allOrders.erase(topBuyOrder->getOrderID());
-
-                competingBuyOrders->erase(competingBuyOrders->begin());
-
-                Trade fulfillment = Trade(tradeCounter++, topBuyOrder->getTraderID(), traderID,
-                    topBuyOrder->getTimestamp(), time, price, amount, tickerLabel);
-
+                Trade fulfillment(tradeCounter++, topBuyOrder->getTraderID(), traderID,
+                                  topBuyOrder->getTimestamp(), time, price, topBuyOrder->getAmount(), tickerLabel);
                 completeTrades.push_back(fulfillment);
 
-            } else if (topBuyOrder->getAmount() == amountFulfillable) {
-                // remove buy order, completely fulfill sell ord.
-
-                amountFulfilled = amountFulfillable;
-                amountFulfillable = 0;
-
-                Trade fulfillment = Trade(tradeCounter++, topBuyOrder->getTraderID(), traderID,
-                    topBuyOrder->getTimestamp(), time, price, topBuyOrder->getAmount(), tickerLabel);
-
+                // Remove the fully fulfilled buy order
                 allOrders.erase(topBuyOrder->getOrderID());
-                
                 competingBuyOrders->erase(competingBuyOrders->begin());
-
-                completeTrades.push_back(fulfillment);
-
             }
         }
-    } else {
-        cout << "no interactions found, registering new order. \n";
+    }
+
+    // If there is any remaining amount, add the sell order to the order book
+    if (amountFulfillable > 0) {
+        neword.partiallyFulfill(amount - amountFulfillable); // Adjust the order quantity
         sellOrders[tickerLabel].orders[price].push_back(neword);
-        OrderLocation loc;
-        loc.type = false;
-        loc.tickerLabel = tickerLabel;
-        loc.price = price;
-        loc.index = buyOrders[tickerLabel].orders[price].size()-1;
+        OrderLocation loc = {false, tickerLabel, price, (int)sellOrders[tickerLabel].orders[price].size() - 1};
         allOrders[orderCounter] = loc;
     }
 
-    cout << "Sell order made successfully! \n";
-
-    cout << "traderID : " << traderID << endl;
-    cout << "tickerLabel : " << tickerLabel << endl;
-    cout << "time : " << time << endl;
-    cout << "price : " << price << endl;
-    cout << "amount : " << amount << endl;
-
     return true;
+}
+
+// Helper function to cancel all past buy and sell orders for a trader and stock
+void OrderBook::cancelTraderOrders(int traderID, string tickerLabel) {
+    // Remove trader's buy orders for the given stock
+    if (buyOrders.find(tickerLabel) != buyOrders.end()) {
+        for (auto& priceOrders : buyOrders[tickerLabel].orders) {
+            auto& orders = priceOrders.second;
+            orders.erase(remove_if(orders.begin(), orders.end(),
+                                   [traderID, this](Order& order) {
+                                       if (order.getTraderID() == traderID) {
+                                           allOrders.erase(order.getOrderID());
+                                           return true;
+                                       }
+                                       return false;
+                                   }),
+                         orders.end());
+        }
+    }
+
+    // Remove trader's sell orders for the given stock
+    if (sellOrders.find(tickerLabel) != sellOrders.end()) {
+        for (auto& priceOrders : sellOrders[tickerLabel].orders) {
+            auto& orders = priceOrders.second;
+            orders.erase(remove_if(orders.begin(), orders.end(),
+                                   [traderID, this](Order& order) {
+                                       if (order.getTraderID() == traderID) {
+                                           allOrders.erase(order.getOrderID());
+                                           return true;
+                                       }
+                                       return false;
+                                   }),
+                         orders.end());
+        }
+    }
 }
 
 vector<Trade>* OrderBook::getCompleteTrades(){ 
     return &completeTrades;
 }
 void OrderBook::clearTradeNotes(){ 
-    // clear completeTrades
+    completeTrades.clear();
 }
 
 void OrderBook::listAllOrders() {
@@ -202,6 +162,22 @@ void OrderBook::listAllOrders() {
             " for " << sellOrders[ord.second.tickerLabel].orders[ord.second.price][ord.second.index].getAmount() <<
             " of " << ord.second.tickerLabel << " at " << ord.second.price;
             cout << endl;
+        }
+    }
+}
+
+void OrderBook::listCompleteTrades(string label) {
+    for(auto& order : buyOrders[label].orders) {
+        for(auto& ord : order.second) {
+            cout << "Buy Order ID: " << ord.getOrderID() << ", Trader ID: " << ord.getTraderID() 
+                 << ", Amount: " << ord.getAmount() << ", Price: " << ord.getPrice() << endl;
+        }
+    }
+    cout << endl;
+    for(auto& order : sellOrders[label].orders) {
+        for(auto& ord : order.second) {
+            cout << "Sell Order ID: " << ord.getOrderID() << ", Trader ID: " << ord.getTraderID() 
+                 << ", Amount: " << ord.getAmount() << ", Price: " << ord.getPrice() << endl;
         }
     }
 }

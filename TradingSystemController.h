@@ -60,6 +60,7 @@ class TradingSystemController {
 
         void dumpTraderInfo(int trID);
         void dumpOrders();
+        void dumpOrders(string label);
 
 
         /// REMOVE ALL FUNCTIONS BELOW THIS POINT

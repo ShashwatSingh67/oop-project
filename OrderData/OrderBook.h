@@ -39,6 +39,8 @@ class OrderBook {
         void clearTradeNotes();
         void listAllOrders();
         void listCompleteTrades();
+        void listCompleteTrades(string label);
+        void cancelTraderOrders(int traderID, string tickerLabel);
 };
 
 

@@ -9,8 +9,8 @@
 using namespace std;
 
 TradingSystemController::TradingSystemController() {
-    for(int i=0; i<10; i++) { // ADD 10 RWBs
-        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 5000, marketdata.getSecList());
+    for(int i=0; i<50; i++) { // ADD 10 RWBs
+        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 500000, marketdata.getSecList());
         participants.push_back(rwb);
     }
 }
@@ -18,7 +18,7 @@ TradingSystemController::TradingSystemController() {
 TradingSystemController::TradingSystemController(string filepath) {
 
     for(int i=0; i<10; i++) { // ADD 10 RWBs
-        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 5000, marketdata.getSecList());
+        RandomWalkBot* rwb = new RandomWalkBot(participantCount++, 500000, marketdata.getSecList());
         participants.push_back(rwb);
     }
     // ADD BOTS HERE
@@ -43,10 +43,10 @@ bool TradingSystemController::completeNextStep() {
             currentPos = bot->getPortfolioVector(marketdata.getSecList());
         }
         pair<vector<int>, vector<int>> desiredPos = bot->makeTradingDecision(marketdata.getAllPastPrices(), currentPos);
-        cout << "called makeTD on bot " << i << endl;
+        // cout << "called makeTD on bot " << i << endl;
         
         bot->setLastIdealPortfolio(desiredPos.first);
-        cout << "desiredPost.first.size() : " << desiredPos.first.size() << endl;
+        // cout << "desiredPost.first.size() : " << desiredPos.first.size() << endl;
         // if(currentPos.empty()) {
         //     currentPos = vector<int>(desiredPos.first.size(), 0);
         // }
@@ -54,10 +54,10 @@ bool TradingSystemController::completeNextStep() {
         for(int j=0; j<vs; j++) {
             if(desiredPos.first[j] > currentPos[j]) {
                 this->placeBuyOrder(i, marketdata.getSecList()[j], abs(currentPos[j]-desiredPos.first[j]), desiredPos.second[j]);
-                cout << "placed buy order\n";
+                // cout << "placed buy order\n";
             } else if(desiredPos.first[j] < currentPos[j]) {
                 this->placeSellOrder(i, marketdata.getSecList()[j], abs(desiredPos.first[j]-currentPos[j]), desiredPos.second[j]);
-                cout << "placed sell order\n";
+                // cout << "placed sell order\n";
             }
         }
     }
@@ -71,7 +71,7 @@ bool TradingSystemController::dumpPerformanceInfo() {
 }
 
 int TradingSystemController::addTrader() {
-    EmptyBot* newTrader = new EmptyBot(participantCount, 5000, marketdata.getSecList());
+    EmptyBot* newTrader = new EmptyBot(participantCount, 500000, marketdata.getSecList());
     participants.push_back(newTrader);
     participantCount++;
     return participantCount-1;
@@ -93,14 +93,14 @@ bool TradingSystemController::placeBuyOrder(int traderID, string tickerLabel, in
     // place the given order into the order book
 
     double tradeCost = price * amount;
-    double traderBal = participants[traderID]->getAvailableBalance();
+    double traderBal = participants[traderID]->getCashBalance();
 
     if(traderBal >= tradeCost) {
         orderbook.submitBuyOrder(traderID, tickerLabel, time, price, amount);
         participants[traderID]->changeAvailBalance(-tradeCost);
     } else {
-        cout << "trader available balance: " << traderBal << endl;
-        cout << "trade cost:               " << tradeCost << endl;
+        // cout << "trader available balance: " << traderBal << endl;
+        // cout << "trade cost:               " << tradeCost << endl;
         return false;
     }
 
@@ -118,14 +118,14 @@ bool TradingSystemController::placeBuyOrder(int traderID, string tickerLabel, in
     return true;
 }
 bool TradingSystemController::placeSellOrder(int traderID, string tickerLabel, int amount, int price) {
-    double traderSecurityBal = participants[traderID]->getAvailPortfolio()[tickerLabel];
+    double traderSecurityBal = participants[traderID]->getPortfolioValue(tickerLabel);
 
     if(traderSecurityBal >= amount) {
         orderbook.submitSellOrder(traderID, tickerLabel, time, price, amount);
         participants[traderID]->changeAvailPortfolio(tickerLabel, -amount);
     } else {
-        cout << "trader security balance: " << traderSecurityBal << endl;
-        cout << "amount:                  " << amount << endl;
+        // cout << "trader security balance: " << traderSecurityBal << endl;
+        // cout << "amount:                  " << amount << endl;
         return false;
     }
 
@@ -153,6 +153,10 @@ void TradingSystemController::dumpTraderInfo(int trID) {
 
 void TradingSystemController::dumpOrders() {
     orderbook.listAllOrders();
+}
+
+void TradingSystemController::dumpOrders(string label) {
+    orderbook.listCompleteTrades(label);
 }
 
 TradingSystemController::~TradingSystemController() {

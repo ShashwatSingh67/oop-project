@@ -34,3 +34,7 @@ int Order::getOrderID() {
 bool Order::getOrderType() {
 	return this->orderType;
 }
+
+int Order::getPrice() {
+	return this->price;
+}

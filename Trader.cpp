@@ -50,6 +50,10 @@ void Trader::setLastIdealPortfolio(vector<int> p) {
     lastIdealPortfolio = p;
 }
 
+int Trader::getPortfolioValue(string label) {
+    return portfolio[label];
+}
+
 vector<int> Trader::getPortfolioVector(vector<string> securities) {
     int ss = securities.size();
     vector<int> result(ss, 0);
@@ -93,15 +97,38 @@ void Trader::changeAvailPortfolio(string tickerLabel, int diff) {
 }
 
 void Trader::fulfillOrder(Trade* tr) {
+    // Get trade details
+    int tradeValue = tr->getTradeValue();
+    int tradeAmount = tr->getAmount();
+    string secID = tr->getSecID();
 
-    // add / subtract relevant amount to cash and available balance
-    // when trade is completed
-    int diff = tr->getTradeValue();
-    if(participantID == tr->getBuyerID()) diff = -diff;
-    else availBalance += tr->getTradeValue();
-    cashBalance += tr->getTradeValue();
-    
-    portfolio[tr->getSecID()] = portfolio[tr->getSecID()] + tr->getAmount();
+    // Check if this trader is the buyer
+    if (participantID == tr->getBuyerID()) {
+        // Deduct cash and update available balance
+        availBalance -= tradeValue;
+        cashBalance -= tradeValue;
 
-    cashBalance += diff;
+        // Add securities to the portfolio
+        portfolio[secID] += tradeAmount;
+        availPortfolio[secID] += tradeAmount;
+    }
+
+    // Check if this trader is the seller
+    if (participantID == tr->getSellerID()) {
+        // Add cash and update available balance
+        availBalance += tradeValue;
+        cashBalance += tradeValue;
+
+        // Deduct securities from the portfolio
+        portfolio[secID] -= tradeAmount;
+        availPortfolio[secID] -= tradeAmount;
+
+        // Ensure no negative securities
+        if (portfolio[secID] < 0) {
+            portfolio[secID] = 0;
+        }
+        if (availPortfolio[secID] < 0) {
+            availPortfolio[secID] = 0;
+        }
+    }
 }
