@@ -1,0 +1,6 @@
+.gitignore
+TradeForge
+.vscode
+a.out
+.DS_Store
+.VSCodeCounter
