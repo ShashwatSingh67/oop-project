@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 bool OrderBook::submitBuyOrder(int traderID, string tickerLabel, int time, int price, int amount) { 
     // Remove all past buy and sell orders for this trader and stock
     cancelTraderOrders(traderID, tickerLabel);
@@ -16,9 +17,11 @@ bool OrderBook::submitBuyOrder(int traderID, string tickerLabel, int time, int p
     if (!sellOrders[tickerLabel].orders[price].empty()) {
         vector<Order>* competingSellOrders = &sellOrders[tickerLabel].orders[price];
 
+        lastSoldPrices[tickerLabel] = price;
+        
         while (!competingSellOrders->empty() && amountFulfillable > 0) {
             Order* topSellOrder = &competingSellOrders->front();
-
+            
             if (topSellOrder->getAmount() > amountFulfillable) {
                 // Partially fulfill the sell order
                 topSellOrder->partiallyFulfill(amountFulfillable);
@@ -67,6 +70,7 @@ bool OrderBook::submitSellOrder(int traderID, string tickerLabel, int time, int 
     if (!buyOrders[tickerLabel].orders[price].empty()) {
         vector<Order>* competingBuyOrders = &buyOrders[tickerLabel].orders[price];
 
+        lastSoldPrices[tickerLabel] = price;
         while (!competingBuyOrders->empty() && amountFulfillable > 0) {
             Order* topBuyOrder = &competingBuyOrders->front();
 
@@ -180,4 +184,14 @@ void OrderBook::listCompleteTrades(string label) {
                  << ", Amount: " << ord.getAmount() << ", Price: " << ord.getPrice() << endl;
         }
     }
+}
+
+
+
+vector<double> OrderBook::getLastSoldPrice(vector<string> labels) {
+    vector<double> prices;
+    for(const auto& label : labels) {
+        prices.push_back(lastSoldPrices[label]);
+    }
+    return prices;
 }

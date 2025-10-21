@@ -95,3 +95,15 @@ vector<string> MarketData::getSecList() {
 vector<MarketState>* MarketData::getAllPastPrices() {
     return &pastPrices;
 }
+
+bool MarketData::submitNewPriceList(MarketState newState) {
+    // check if size matters to see if anything got duplicated or smt
+    if(newState.prices.size() != this->securityCount) {
+        cout << "Error: submitted price list size does not match security count.\n";
+        return false;
+    }
+    // otherwise if it works
+    this->pastPrices.push_back(newState);
+    this->historyDuration++;
+    return true;
+}

@@ -29,6 +29,8 @@ class MarketData {
         void listSecurities();
         vector<string> getSecList();
 
+        bool submitNewPriceList(MarketState);
+
         vector<MarketState>* getAllPastPrices();
 
 };

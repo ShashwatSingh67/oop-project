@@ -36,6 +36,7 @@ int TradingSystemController::stopSimulation() {
 }
 
 bool TradingSystemController::completeNextStep() {
+    time++;
     for(int i=0; i<participantCount; i++) {
         TradingBot* bot = participants[i];
         vector<int> currentPos = bot->getLastIdealPortfolio();
@@ -60,7 +61,17 @@ bool TradingSystemController::completeNextStep() {
                 // cout << "placed sell order\n";
             }
         }
+
+        // for each stock, calculate avg of highest buy order and lowest sell order,
+        // submit that as new price to marketdata
+        MarketState newState;
+        newState.historical = false;
+        newState.time = time;
+        newState.prices = orderbook.getLastSoldPrice(marketdata.getSecList());
+        marketdata.submitNewPriceList(newState);
     }
+
+
     return true;
 }
 

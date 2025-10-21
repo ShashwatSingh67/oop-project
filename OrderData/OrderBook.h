@@ -26,6 +26,8 @@ class OrderBook {
         unordered_map<string, OrderList> buyOrders;
         unordered_map<string, OrderList> sellOrders;
 
+        unordered_map<string, int> lastSoldPrices;
+
         map<int, OrderLocation> allOrders;
 
         vector<Trade> completeTrades;
@@ -41,6 +43,8 @@ class OrderBook {
         void listCompleteTrades();
         void listCompleteTrades(string label);
         void cancelTraderOrders(int traderID, string tickerLabel);
+        void setLastSoldPrices(vector<int> prices);
+        vector<double> getLastSoldPrice(vector<string> labels);
 };
 
 
